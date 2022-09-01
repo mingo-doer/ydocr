@@ -20,7 +20,7 @@ import time
 
 import onnxruntime as ort
 import logging
-from ppocronnx.utility import get_model_data, get_model_data_from_path
+from ydocr.utility import get_model_data, get_model_data_from_path
 from .preprocess import preprocess_op
 from .postprocess import DBPostProcess
 

@@ -1,9 +1,9 @@
-from ppocronnx.predict_system import TextSystem
+from ydocr.predict_system import TextSystem
 import cv2
 import logging
 import sys
 from PIL import Image
-from ppocronnx.utility import draw_ocr_box_result
+from ydocr.utility import draw_ocr_box_result
 
 
 def main():
