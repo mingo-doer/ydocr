@@ -26,7 +26,7 @@ pip install ydocr
 ## 使用
 
 ```python
-from ydocr.utility import draw_ocr_box_result
+
 import cv2
 
 text_sys = TextSystem()
@@ -44,4 +44,12 @@ img = cv2.imread('test.png')
 res = text_sys.detect_and_ocr(img)
 for boxed_result in res:
     print("{}, {:.3f}".format(boxed_result.ocr_text, boxed_result.score))
+
+
+# 检测并识别文本（换行执行）
+from ydocr.predict_system import TextSystem,order_onrow
+img = cv2.imread('test.png')
+res = text_sys.detect_and_ocr(img)
+res = order_onrow(res)
 ```
+

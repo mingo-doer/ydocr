@@ -33,7 +33,7 @@ class TextRecognizer(object):
             ort_providers = ['CPUExecutionProvider']
         self.rec_image_shape = [3, 32, 320]
         self.character_type = 'ch'
-        self.rec_batch_num = 6
+        self.rec_batch_num = 8
         self.rec_algorithm = 'CRNN'
         self.postprocess_op = CTCLabelDecode(character_dict=character_dict,
                                              character_type='ch', use_space_char=True)

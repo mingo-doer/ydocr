@@ -21,6 +21,7 @@ import numpy as np
 from .cls import TextClassifier
 from .det import TextDetector
 from .rec import TextRecognizer
+from copy import deepcopy
 
 
 logger = logging
@@ -88,6 +89,14 @@ class TextSystem(object):
         rec_res, elapse = self.text_recognizer(tmp_img_list)
         return rec_res
 
+    
+    def trans_poly_to_bbox(self, poly):
+        x1 = int(np.min([p[0] for p in poly]))
+        x2 = int(np.max([p[0] for p in poly]))
+        y1 = int(np.min([p[1] for p in poly]))
+        y2 = int(np.max([p[1] for p in poly]))
+        return [x1, y1, x2, y2]
+
     def detect_and_ocr(self, img: np.ndarray, drop_score=0.5, unclip_ratio=None, box_thresh=None):
         ori_im = img.copy()
         dt_boxes, elapse = self.text_detector(img, unclip_ratio, box_thresh)
@@ -112,7 +121,7 @@ class TextSystem(object):
         for box, rec_reuslt, img_crop in zip(dt_boxes, rec_res, img_crop_list):
             text, score = rec_reuslt
             if score >= drop_score:
-                res.append(BoxedResult(box, img_crop, text, score))
+                res.append(BoxedResult(self.trans_poly_to_bbox(box), img_crop, text, score))
         return res
 
 
@@ -129,10 +138,11 @@ class BoxedResult(object):
         self.score = score
 
     def __str__(self):
-        return 'BoxedResult[%s, %s]' % (self.ocr_text, self.score)
+        return 'BoxedResult[%s, %s %s ]' % (self.ocr_text, self.score,self.box)
 
     def __repr__(self):
         return self.__str__()
+
 
 
 def sorted_boxes(dt_boxes):
@@ -154,3 +164,34 @@ def sorted_boxes(dt_boxes):
             _boxes[i] = _boxes[i + 1]
             _boxes[i + 1] = tmp
     return _boxes
+
+def  order_onrow(ocr_info):
+        dt_boxes = []
+        for res in ocr_info:
+            dt_boxes.append(res.box)
+        # 平均字间距
+        avg_word_height = int(np.mean([dt_boxes[i][3] - dt_boxes[i][1] for i in range(len(dt_boxes))]) / 2  )
+
+        text = ''
+        res = sorted(ocr_info, key=lambda r: (r.box[1], r.box[0]))
+        for i in range(len(res) - 1):
+            for j in range(i, 0, -1):
+                if abs(res[j + 1].box[1] - res[j].box[1]) < avg_word_height and \
+                        (res[j + 1].box[0] < res[j].box[0]):
+                    tmp = deepcopy(res[j])
+                    res[j] = deepcopy(res[j + 1])
+                    res[j + 1] = deepcopy(tmp)
+            # 
+            if abs(res[i + 1].box[1] - res[i].box[1]) < avg_word_height :
+                text += res[i].ocr_text + '\\r'
+            else:
+                text += res[i].ocr_text + '\\n'
+        
+        # 判断最后一位
+        if abs(res[-1].box[1] - res[-2].box[1]) < 20 :  
+            text += res[-1].ocr_text 
+        else:
+            text += res[-1].ocr_text     
+        
+        return text
+
