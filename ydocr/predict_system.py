@@ -166,32 +166,32 @@ def sorted_boxes(dt_boxes):
     return _boxes
 
 def  order_onrow(ocr_info):
-        dt_boxes = []
-        for res in ocr_info:
-            dt_boxes.append(res.box)
-        # 平均字间距
-        avg_word_height = int(np.mean([dt_boxes[i][3] - dt_boxes[i][1] for i in range(len(dt_boxes))]) / 2  )
+    dt_boxes = []
+    for res in ocr_info:
+        dt_boxes.append(res.box)
+    # 平均字间距
+    avg_word_height = int(np.mean([dt_boxes[i][3] - dt_boxes[i][1] for i in range(len(dt_boxes))]) / 2  )
 
-        text = ''
-        res = sorted(ocr_info, key=lambda r: (r.box[1], r.box[0]))
-        for i in range(len(res) - 1):
-            for j in range(i, 0, -1):
-                if abs(res[j + 1].box[1] - res[j].box[1]) < avg_word_height and \
-                        (res[j + 1].box[0] < res[j].box[0]):
-                    tmp = deepcopy(res[j])
-                    res[j] = deepcopy(res[j + 1])
-                    res[j + 1] = deepcopy(tmp)
-            # 
-            if abs(res[i + 1].box[1] - res[i].box[1]) < avg_word_height :
-                text += res[i].ocr_text + '\\r'
-            else:
-                text += res[i].ocr_text + '\\n'
-        
-        # 判断最后一位
-        if abs(res[-1].box[1] - res[-2].box[1]) < 20 :  
-            text += res[-1].ocr_text 
+    text = ''
+    res = sorted(ocr_info, key=lambda r: (r.box[1], r.box[0]))
+    res.append(res[-1])
+    for i in range(len(res) - 1):
+        for j in range(i, 0, -1):
+            if abs(res[j + 1].box[1] - res[j].box[1]) < avg_word_height and \
+                    (res[j + 1].box[0] < res[j].box[0]):
+                tmp = deepcopy(res[j])
+                res[j] = deepcopy(res[j + 1])
+                res[j + 1] = deepcopy(tmp)
+        if abs(res[i + 1].box[1] - res[i].box[1]) < avg_word_height :
+            text += res[i].ocr_text + '\\r'
         else:
-            text += res[-1].ocr_text     
-        
-        return text
+            text += res[i].ocr_text + '\\n'
+    
+    # # 判断最后一位
+    # if abs(res[-1].box[1] - res[-2].box[1]) < 20 :  
+    #     text += res[-1].ocr_text 
+    # else:
+    #     text += res[-1].ocr_text     
+    
+    return text
 

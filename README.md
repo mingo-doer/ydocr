@@ -51,5 +51,16 @@ from ydocr.predict_system import TextSystem,order_onrow
 img = cv2.imread('test.png')
 res = text_sys.detect_and_ocr(img)
 res = order_onrow(res)
+
+#检测并识别文本，图片源是网络图片
+from urllib.request import urlopen
+def cv_imread_url(img_url):
+    resp = urlopen(img_url)
+    img = np.asarray(bytearray(resp.read()), dtype=np.uint8)
+    img = cv2.imdecode(img, cv2.IMREAD_COLOR)
+    return img 
+
+img = cv_imread_url('https://imgurl.png')
+
 ```
 
