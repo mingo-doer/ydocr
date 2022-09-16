@@ -1,12 +1,11 @@
 Metadata-Version: 2.1
-Name: ppocr-onnx
-Version: 0.0.3.8
-Summary: 利用 onnxruntime 及 PaddleOCR 提供的模型, 对图片中的文字进行检测与识别.
-Home-page: https://github.com/triwinds/ppocr-onnx
-Author: triwinds
-Author-email: triwinds@foxmail.com
+Name: ydocr
+Version: 1.1.1
+Summary: 影刀离线OCR
+Home-page: https://github.com/mingo-doer/ydocr
+Author: jiaer
+Author-email: jia.er@winrobot360.com
 License: Apache 2.0
-Platform: UNKNOWN
 Classifier: Development Status :: 4 - Beta
 Classifier: Operating System :: OS Independent
 Classifier: Intended Audience :: Developers
@@ -16,7 +15,7 @@ Classifier: Topic :: Scientific/Engineering :: Artificial Intelligence
 Description-Content-Type: text/markdown
 License-File: LICENSE
 
-# PPOCR-ONNX
+
 
 
 ## 简介
@@ -33,18 +32,18 @@ License-File: LICENSE
 
  - [PaddleOCR](https://github.com/PaddlePaddle/PaddleOCR)
  - [手把手教你使用ONNXRunTime部署PP-OCR](https://aistudio.baidu.com/aistudio/projectdetail/1479970)
- - `ch_PP-OCRv3_det_infer` 及 `ch_PP-OCRv2_rec_infer` 模型来自 [RapidAI/RapidOCR](https://github.com/RapidAI/RapidOCR)
+
 
 ## 安装
 
 ```bash
-pip install ppocr-onnx
+pip install ydocr
 ```
 
 ## 使用
 
 ```python
-from ppocronnx.predict_system import TextSystem
+from ydocr.utility import draw_ocr_box_result
 import cv2
 
 text_sys = TextSystem()
@@ -63,5 +62,3 @@ res = text_sys.detect_and_ocr(img)
 for boxed_result in res:
     print("{}, {:.3f}".format(boxed_result.ocr_text, boxed_result.score))
 ```
-
-
