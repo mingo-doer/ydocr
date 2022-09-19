@@ -8,7 +8,7 @@ with open('requirements.txt', 'r', encoding='utf-8') as f:
 
 setuptools.setup(
     name="ydocr",
-    version="1.1",
+    version="1.2",
     author="jiaer",
     author_email="jia.er@winrobot360.com",
     license='Apache 2.0',

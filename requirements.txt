@@ -5,3 +5,5 @@ shapely
 pyclipper
 pillow
 requests
+urllib3
+tablepyxl

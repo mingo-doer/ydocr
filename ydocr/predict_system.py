@@ -18,9 +18,9 @@ from typing import Iterable, List, Optional
 import cv2
 import numpy as np
 
-from .cls import TextClassifier
-from .det import TextDetector
-from .rec import TextRecognizer
+from ydocr.cls import TextClassifier
+from ydocr.det import TextDetector
+from ydocr.rec import TextRecognizer
 from copy import deepcopy
 
 
