@@ -188,22 +188,4 @@ def draw_boxes(image, boxes, scores=None, drop_score=0.5):
         image = cv2.polylines(np.array(image), [box], True, (255, 0, 0), 2)
     return image
 
-def main():
-    image_file = r'img_file/20220916144659.png'
-    starttime = time.time()
-    table_sys = TableSystem()
-    img = cv2.imread(image_file)
-    pred_res, _ = table_sys(img)
-    print(pred_res['html'])
-    pred_html = pred_res['html'] 
-    excel_path = 'save/table.xlsx'
-    to_excel(pred_html, excel_path)
-    end_time = time.time()-starttime
-    print(end_time)
-    
 
-
-if __name__ == "__main__":
-    # args = parse_args()
-
-    main()
