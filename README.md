@@ -28,6 +28,7 @@ pip install ydocr
 ```python
 
 import cv2
+from ydocr.predict_system import TextSystem,order_onrow
 
 text_sys = TextSystem()
 
