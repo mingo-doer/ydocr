@@ -13,7 +13,7 @@
 # limitations under the License.
 import math
 import pkgutil
-
+import os 
 import cv2
 import numpy as np
 from PIL import Image, ImageDraw, ImageFont
@@ -288,3 +288,9 @@ def get_model_data_from_path(model_path):
 def get_character_dict():
     data = pkgutil.get_data(__name__, 'model/ppocr_keys_v1.txt')
     return data.decode('utf-8').splitlines()
+
+def get_table_character_dict():
+    root = os.path.split(os.path.realpath(__file__))[0]
+    path = os.path.join(root, 'model/table_structure_dict_ch.txt')
+    
+    return path

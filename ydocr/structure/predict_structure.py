@@ -24,7 +24,7 @@ import cv2
 import numpy as np
 import time
 import json
-from ydocr.utility import get_model_data, get_character_dict, get_model_data_from_path
+from ydocr.utility import get_model_data, get_table_character_dict, get_model_data_from_path
 from preprocess import preprocess_op
 from postprocess import TableLabelDecode
 import onnxruntime as ort
@@ -38,8 +38,8 @@ import onnxruntime as ort
 # from ppstructure.utility import parse_args
 
 
-character_dict = 'ydocr/model/table_structure_dict_ch.txt'
-table_model_file = 'ydocr/model/table_model_ch.onnx'
+character_dict = get_table_character_dict()
+table_model_file = 'table_model_ch.onnx'
 
 def build_pre_process_list(args):
     resize_op = {'ResizeTableImage': {'max_len': args.table_max_len, }}
@@ -104,7 +104,7 @@ def transform(data, ops=None):
 
 # table_model = utility.create_predictor(args, 'table', logger)
 class TableStructurer(object):
-    def __init__(self,ort_providers=None):
+    def __init__(self,ort_providers=None,table_model_path=None):
         # pre_process_list = build_pre_process_list(args)
         if ort_providers is None:
             ort_providers = ['CPUExecutionProvider']
@@ -116,8 +116,8 @@ class TableStructurer(object):
         # }
         
         self.preprocess_op = preprocess_op
-        self.postprocess_op = TableLabelDecode(character_dict_path = character_dict,merge_no_span_structure=True)
-        model_data = get_model_data(table_model_file) if table_model_file is None else get_model_data_from_path(table_model_file)
+        self.postprocess_op = TableLabelDecode(character_dict_path = character_dict ,merge_no_span_structure=True)
+        model_data = get_model_data(table_model_file) if table_model_path is None else get_model_data_from_path(table_model_path)
         so = ort.SessionOptions()
         so.log_severity_level = 3
         sess = ort.InferenceSession(model_data, so, providers=ort_providers)

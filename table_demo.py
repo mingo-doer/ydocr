@@ -27,7 +27,7 @@ def main():
     #   url 读取 
     # img = cv_imread_url('https://cdn.nlark.com/yuque/0/2022/png/22909407/1662605393255-ed70d655-8d39-4145-8632-1a5cafe0a56a.png')
     #   本地文件读取
-    image_file = r"img_file/00018069.jpg"
+    image_file = r"D:\yd_project\OCR\PaddleOCR-release-2.6\PaddleOCR-release-2.6\doc\imgs\00018069.jpg"
     img = cv_imread(image_file)
     # 3. 表格识别
     pred_res, _ = table_sys(img)
@@ -35,8 +35,8 @@ def main():
     pred_html = pred_res['html'] 
     # 4. 结果导出excel
     excel_dir = 'save'
-    excel_filename = os.path.split(image_file)[-1]
-
+    excel_filename = os.path.split('image_file')[-1]
+    # print(excel_filename)
     if not os.path.exists(excel_dir):
         os.makedirs(excel_dir)
     to_excel(pred_html, os.path.join(excel_dir,excel_filename[:-4]+'.xlsx'))

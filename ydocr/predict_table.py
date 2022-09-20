@@ -32,10 +32,10 @@ from ydocr.det import TextDetector
 from ydocr.rec import TextRecognizer
 # import tools.infer.utility as utility
 from predict_system import sorted_boxes,get_rotate_crop_image
-from structure.predict_structure import TableStructurer
-from structure.matcher import TableMatch
+from ydocr.structure.predict_structure import TableStructurer
+from ydocr.structure.matcher import TableMatch
 import onnxruntime as ort
-from ydocr.utility import get_model_data,get_model_data_from_path
+from ydocr.utility import get_model_data,get_model_data_from_path,get_table_character_dict
 from tablepyxl import tablepyxl
 
 
@@ -63,11 +63,11 @@ def expand(pix, det_box, shape):
 # args = parse_args()
 # table_model = utility.create_predictor(args, 'table', logger)
 
-character_dict = 'ydocr/model/table_structure_dict_ch.txt'
-table_model_file = 'ydocr/model/table_model_ch.onnx'
+character_dict = get_table_character_dict()
+table_model_file = 'table_model_ch.onnx'
 
 class TableSystem(object):
-    def __init__(self,  box_thresh=0.5, unclip_ratio=1.6, rec_model_path=None, det_model_path=None,
+    def __init__(self,  box_thresh=0.5, unclip_ratio=1.6, rec_model_path=None, det_model_path=None,table_model_path=None,
                  ort_providers=None):
 
 
@@ -83,7 +83,7 @@ class TableSystem(object):
 
         # self.benchmark = args.benchmark
         # self.predictor, self.input_tensor, self.output_tensors, self.config = table_model
-        model_data = get_model_data(table_model_file) if table_model_file is None else get_model_data_from_path(table_model_file)
+        model_data = get_model_data(table_model_file) if table_model_path is None else get_model_data_from_path(table_model_path)
         so = ort.SessionOptions()
         so.log_severity_level = 3
         sess = ort.InferenceSession(model_data, so, providers=ort_providers)

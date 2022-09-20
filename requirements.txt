@@ -7,3 +7,4 @@ pillow
 requests
 urllib3
 tablepyxl
+six
