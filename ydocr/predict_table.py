@@ -36,7 +36,7 @@ from ydocr.structure.predict_structure import TableStructurer
 from ydocr.structure.matcher import TableMatch
 import onnxruntime as ort
 from ydocr.utility import get_model_data,get_model_data_from_path,get_table_character_dict
-from tablepyxl import tablepyxl
+
 
 
 # from ppstructure.table.table_master_match import TableMasterMatcher
@@ -173,9 +173,8 @@ class TableSystem(object):
         #     len(rec_res), rec_elapse))
         return dt_boxes, rec_res, det_elapse, rec_elapse
 
-
 def to_excel(html_table, excel_path):
-    
+    from tablepyxl import tablepyxl
     tablepyxl.document_to_xl(html_table, excel_path)
 
 def draw_boxes(image, boxes, scores=None, drop_score=0.5):
